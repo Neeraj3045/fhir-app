@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  // Dont't remove it -- it's used for health check
+  //it's used for health check
   @Get()
   @ApiExcludeEndpoint()
   healthCheck(): string {
