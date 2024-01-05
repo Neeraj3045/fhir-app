@@ -1,6 +1,6 @@
 openapi: 3.0.0
 paths:
-  /api/v1/prescriptions:
+  /v1/prescriptions:
     post:
       operationId: add-prescription
       summary: Add Prescriptions
@@ -46,7 +46,7 @@ paths:
       security:
         &a5
         - bearer: []
-  "/api/v1/prescriptions/{nhi}":
+  "/v1/prescriptions/{nhi}":
     get:
       operationId: search-prescription
       summary: Search NHI
@@ -71,7 +71,7 @@ paths:
         "500": *a3
       tags: *a4
       security: *a5
-  "/api/v1/prescriptions/{nhi}/{id}":
+  "/v1/prescriptions/{nhi}/{id}":
     put:
       operationId: update-prescription
       summary: Update Prescriptions
@@ -117,15 +117,15 @@ info:
   version: "1.0"
   contact:
     name: FHIR
-    url: http://localhost:1001
+    url: http://localhost:1001/api/
     email: neblar.support@gmail.com
-  termsOfService: http://localhost:1001
+  termsOfService: http://localhost:1001/api/
   license:
     name: Privacy Policy
-    url: http://localhost:1001
+    url: http://localhost:1001/api/
 tags: []
 servers:
-  - url: http://localhost:1001/fhir-app
+  - url: http://localhost:1001/api/
     description: ""
     variables: {}
 components:
@@ -203,7 +203,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T09:32:01.955Z
+          example: 2024-01-05T10:49:16.734Z
         medications:
           example:
             &a7
@@ -260,7 +260,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T09:32:01.955Z
+          example: 2024-01-05T10:49:16.734Z
         medications:
           example: *a7
           type: array
@@ -291,4 +291,4 @@ components:
             $ref: "#/components/schemas/PrescriptionSave"
 externalDocs:
   description: Find out more
-  url: http://localhost:1001
+  url: http://localhost:1001/api/

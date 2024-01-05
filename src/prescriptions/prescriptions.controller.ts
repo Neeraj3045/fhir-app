@@ -46,7 +46,7 @@ import { PrescriptionSavedto, PrescriptionUpdateDto } from './dto/response/presc
   description: MESSAGES.INTERNAL_SERVER_ERROR_MSG,
 })
 
-@Controller('api')
+@Controller()
 export class PrescriptionsController {
   constructor(private readonly PrescriptionsService: PrescriptionsService) { }
 

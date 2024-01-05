@@ -32,6 +32,12 @@
 $ npm install
 ```
 
+Copy the `.env.example` file to `.env` and fill in the details in .env:
+
+```
+cp .env.example .env
+```
+
 ## Running the app
 
 ```bash
@@ -57,16 +63,19 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+The server will start on port 1001. You can change this by setting the `PORT` environment variable in the `.env` file.
+
+## API Endpoints Information
+
+- `http://localhost:1001/`: Base Url
+- `GET  api-docs/`: Swagger documentation
+- `GET  api/v1/prescriptions/:nhi`: Search prescription by NHI
+- `POST api/v1/prescriptions`: Add a new prescription
+- `PUT  api/v1/prescriptions/:nhi/:prescriptionId`: Update an existing prescription
 
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
