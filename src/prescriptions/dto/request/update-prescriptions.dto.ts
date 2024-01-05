@@ -1,4 +1,4 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import {PartialType } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { CreateprescriptionsDto } from './create-prescriptions.dto';
 import { STATUS } from 'src/enums/enums';

@@ -1,9 +1,9 @@
 openapi: 3.0.0
 paths:
-  /v1/prescriptions:
+  /api/v1/prescriptions:
     post:
       operationId: add-prescription
-      summary: Add Prescriptions Details
+      summary: Add Prescriptions
       description: Add Prescriptions
       parameters: []
       requestBody:
@@ -46,11 +46,17 @@ paths:
       security:
         &a5
         - bearer: []
+  "/api/v1/prescriptions/{nhi}":
     get:
       operationId: search-prescription
       summary: Search NHI
       description: Search NHI
-      parameters: []
+      parameters:
+        - name: nhi
+          required: true
+          in: path
+          schema:
+            type: string
       responses:
         "201":
           description: Filter prescriptions
@@ -65,29 +71,17 @@ paths:
         "500": *a3
       tags: *a4
       security: *a5
-  "/v1/prescriptions/{id}":
-    get:
-      operationId: fetch-prescription
-      summary: Get Prescription Details
-      description: Get Prescription Details
-      parameters: []
-      responses:
-        "201":
-          description: Get Prescription details successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateprescriptionsDto"
-        "400": *a1
-        "403": *a2
-        "500": *a3
-      tags: *a4
-      security: *a5
+  "/api/v1/prescriptions/{nhi}/{id}":
     put:
       operationId: update-prescription
-      summary: Update Prescription
-      description: Update Prescription
+      summary: Update Prescriptions
+      description: Update Prescriptions
       parameters:
+        - name: nhi
+          required: true
+          in: path
+          schema:
+            type: string
         - name: id
           required: true
           in: path
@@ -119,19 +113,19 @@ info:
 
     '
       and standard method from web, mobile and desktop applications.
-    <SecurityDefinitions /> <i>Updated on 25<sup>th</sup>  December  2023 <i/>
+    <SecurityDefinitions />
   version: "1.0"
   contact:
     name: FHIR
-    url: http://localhost:1000
+    url: http://localhost:1001
     email: neblar.support@gmail.com
-  termsOfService: http://localhost:1000
+  termsOfService: http://localhost:1001
   license:
     name: Privacy Policy
-    url: http://localhost:1000
+    url: http://localhost:1001
 tags: []
 servers:
-  - url: http://localhost:1000/fhir-app
+  - url: http://localhost:1001/fhir-app
     description: ""
     variables: {}
 components:
@@ -202,14 +196,14 @@ components:
         patient:
           example:
             &a6
-            nhi: NHI-1234
+            nhi: nhi-1234
             name: Smith
           allOf:
             - $ref: "#/components/schemas/PatientParam"
         date:
           format: date-time
           type: string
-          example: 2023-12-25T16:04:40.951Z
+          example: 2024-01-05T09:32:01.955Z
         medications:
           example:
             &a7
@@ -266,7 +260,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2023-12-25T16:04:40.951Z
+          example: 2024-01-05T09:32:01.955Z
         medications:
           example: *a7
           type: array
@@ -297,4 +291,4 @@ components:
             $ref: "#/components/schemas/PrescriptionSave"
 externalDocs:
   description: Find out more
-  url: http://localhost:1000
+  url: http://localhost:1001

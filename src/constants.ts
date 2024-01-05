@@ -21,19 +21,15 @@ export const MESSAGES = {
     INVALID_PRESCRIPTION_ID:`Invalid prescriptions id`,
 
     ADD_PRESCRIPTION_DESCRIPTION:`Add Prescriptions`,
-    ADD_PRESCRIPTION_SUMMARY:`Add Prescriptions Details`,
+    ADD_PRESCRIPTION_SUMMARY:`Add Prescriptions`,
     ADD_PRESCRIPTION_RESPONSE_DESCRIPTION:`Prescription added successfully`,
 
     SEARCH_PRESCRIPTION_DESCRIPTION:`Search NHI`,
     SEARCH_PRESCRIPTION_SUMMARY:`Search NHI`,
     SEARCH_PRESCRIPTION_RESPONSE_DESCRIPTION:`Filter prescriptions`,
 
-    GET_PRESCRIPTION_DESCRIPTION:`Get Prescription Details`,
-    GET_PRESCRIPTION_SUMMARY:`Get Prescription Details`,
-    GET_PRESCRIPTION_RESPONSE_DESCRIPTION:`Get Prescription details successfully`,
-
-    UPDATE_PRESCRIPTION_DESCRIPTION:`Update Prescription`,
-    UPDATE_PRESCRIPTION_SUMMARY:`Update Prescription`,
+    UPDATE_PRESCRIPTION_DESCRIPTION:`Update Prescriptions`,
+    UPDATE_PRESCRIPTION_SUMMARY:`Update Prescriptions`,
     UPDATE_PRESCRIPTION_RESPONSE_DESCRIPTION:`Update Prescription successfully`,
 
 };

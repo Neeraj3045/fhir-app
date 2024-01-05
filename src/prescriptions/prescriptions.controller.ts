@@ -15,7 +15,6 @@ import { CreateprescriptionsDto } from './dto/request/create-prescriptions.dto';
 import { UpdatePrescriptionDto } from './dto/request/update-prescriptions.dto';
 import { TransformInterceptor } from 'src/common/interceptor/transform.interceptor';
 import { PaginationWithFilters } from 'src/utils/paginationWithFilter';
-import { ParamsWithId } from 'src/utils/paramWithId';
 import { 
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -47,10 +46,11 @@ import { PrescriptionSavedto, PrescriptionUpdateDto } from './dto/response/presc
   description: MESSAGES.INTERNAL_SERVER_ERROR_MSG,
 })
 
-@Controller()
+@Controller('api')
 export class PrescriptionsController {
   constructor(private readonly PrescriptionsService: PrescriptionsService) { }
 
+  //Create Presciption
   @Post('/v1/prescriptions')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
@@ -70,7 +70,8 @@ export class PrescriptionsController {
     return this.PrescriptionsService.createPrescriptions(CreateprescriptionsDto);
   }
 
-  @Get('/v1/prescriptions')
+  //Search prescriptions
+  @Get('/v1/prescriptions/:nhi')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: 'search-prescription',
@@ -85,31 +86,13 @@ export class PrescriptionsController {
   })
   @UseInterceptors(TransformInterceptor)
   findPrescriptions(
-    @Query() { filters, page, limit, sort }: PaginationWithFilters
+    @Query() {page, limit}: PaginationWithFilters,
+    @Param('nhi')  nhi : string
   ) {
-    return this.PrescriptionsService.prescriptionsList(filters, page, limit, sort);
+    return this.PrescriptionsService.prescriptionsList(nhi, page, limit);
   }
 
-  @Get('/v1/prescriptions/:id')
-  @HttpCode(HttpStatus.OK)
-  @UseInterceptors(TransformInterceptor)
-  @ApiOperation({
-    operationId: 'fetch-prescription',
-    description: MESSAGES.GET_PRESCRIPTION_DESCRIPTION,
-    summary: MESSAGES.GET_PRESCRIPTION_SUMMARY,
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    type: CreateprescriptionsDto,
-    isArray: false,
-    description: MESSAGES.GET_PRESCRIPTION_RESPONSE_DESCRIPTION,
-  })
-  findPrescription(
-    @Param() { id }: ParamsWithId) {
-    return this.PrescriptionsService.prescriptionDetails(id);
-  }
-
-  @Put('/v1/prescriptions/:id')
+  @Put('/v1/prescriptions/:nhi/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: 'update-prescription',
@@ -124,9 +107,10 @@ export class PrescriptionsController {
   })
   @UseInterceptors(TransformInterceptor)
   updatePrescription(
+    @Param('nhi') nhi: string,
     @Param('id') id: string,
     @Body() UpdatePrescriptionDto: UpdatePrescriptionDto
   ) {
-    return this.PrescriptionsService.updatePrescription(id, UpdatePrescriptionDto);
+    return this.PrescriptionsService.updatePrescription(nhi,id,UpdatePrescriptionDto);
   }
 }

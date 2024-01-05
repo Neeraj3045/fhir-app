@@ -11,9 +11,6 @@ import {
     } from 'class-validator';
 
 export class MedicationParam{
-    @IsNotEmpty()
-    @IsString()
-    "id":string
 
     @IsNotEmpty()
     @IsString()
@@ -23,7 +20,7 @@ export class MedicationParam{
 export class PatientParam{
     @IsNotEmpty()
     @IsString()
-    @Length(6)
+    @Length(10)
     "nhi":string;
 
     @IsNotEmpty({"message":"Name should be string & required"})
@@ -32,7 +29,7 @@ export class PatientParam{
 }
 
 export class CreateprescriptionsDto {
-    @ApiProperty({example:{'nhi':'NHI-1234','name':'Smith'},})
+    @ApiProperty({example:{'nhi':'nhi-1234','name':'Smith'},})
     @IsNotEmpty()
     @ValidateNested({each:true})
     @Type(()=>PatientParam)

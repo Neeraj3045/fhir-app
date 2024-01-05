@@ -49,8 +49,6 @@ configModules.push(MongooseModule.forRoot(mongoDB));
 
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    if (process.env.LOG_ENABLE == "YES") {
       consumer.apply(LoggerMiddleware).forRoutes('*');
-    }
   }
 }

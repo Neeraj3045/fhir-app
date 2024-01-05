@@ -9,7 +9,7 @@ import { Type } from 'class-transformer';
 export class PaginationWithFilters {
 
 @IsOptional()
-filters?:any;
+nhi?:string;
 
 @IsOptional()
 @Type(() => Number)
@@ -23,7 +23,4 @@ page?: number;
 @Min(1)
 @Max(20)
 limit?: number;
-
-@IsOptional()
-sort:any;
 }

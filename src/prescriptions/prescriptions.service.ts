@@ -1,5 +1,6 @@
 import {
   Injectable,
+  NotFoundException,
   PreconditionFailedException
 } from '@nestjs/common';
 import { Model } from 'mongoose';
@@ -8,6 +9,9 @@ import { UpdatePrescriptionDto } from './dto/request/update-prescriptions.dto';
 import { PrescriptionDocument, Prescription } from './schemas/prescriptions.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { MESSAGES } from 'src/constants';
+import { searchPrescrtiton } from 'src/common/function/external-api/search-prescription';
+import { postPrescription } from 'src/common/function/external-api/postPrescription';
+import { updatePrescripton } from 'src/common/function/external-api/updatePrescription';
 @Injectable()
 export class PrescriptionsService {
   constructor(@InjectModel(Prescription.name)
@@ -18,6 +22,9 @@ export class PrescriptionsService {
     try {
       const saveData = await this.PrescriptionModel.create(createPrescription);
       if (saveData) {
+        // call prescription push third party api
+        postPrescription(`${process.env.PRESCRIPTION_URL}`,createPrescription);
+
         return { "prescriptionId": saveData._id, "message": MESSAGES.CREATED_SUCCESS_MSG };
       } else {
         throw new PreconditionFailedException({
@@ -30,85 +37,66 @@ export class PrescriptionsService {
   }
 
   async prescriptionsList(
-    filters: any,
+    nhi: string,
     page = 1,
-    limitOfDocuments = 20,
-    sorting: any,
+    limit = 20
   ) {
     try {
       let matchCondition = {};
-      if (filters) {
-        matchCondition = JSON.parse(decodeURIComponent(filters));
+      if(nhi){
+        matchCondition = {"patient.nhi":{"$regex": nhi}};
       }
-      if (sorting) {
-        sorting = JSON.parse(decodeURI(sorting));
-      } else {
-        sorting = { "CreatedOn": -1 };
-      }
-
-      const prescriptionsList = await this.PrescriptionModel.aggregate([
+    
+      let prescriptionsList = await this.PrescriptionModel.aggregate([
         {
           "$match": matchCondition,
         },
-        { "$sort": sorting },
-        {
-          $project: { "__v": 0, "createdBy": 0, "updatedBy": 0 }
-        },
-        { $skip: (page - 1) * limitOfDocuments },
-        { $limit: limitOfDocuments }
+        { "$sort": { "CreatedOn": -1 } },
+        { $skip: (page - 1) * limit },
+        { $limit: limit }
       ]);
 
-      if (prescriptionsList?.length > 0) {
+      if (prescriptionsList?.length>0) {
         return {
           "paginated": {
             count: prescriptionsList?.length,
-            from: (page - 1) * limitOfDocuments,
+            from: (page - 1) * limit,
             page: page,
-            limit: limitOfDocuments
+            limit: limit
           },
           "results": prescriptionsList
         };
-      }
-      return { results: [] };
-
-    } catch (Error) {
-      throw new PreconditionFailedException(Error);
-    }
-  }
-
-  async prescriptionDetails(id: string) {
-    try {
-      return await this.PrescriptionModel.findOne(
-        { _id: id },
-        { "__v": 0, "createdOn": 0, "status": 0 })
-    } catch (Error) {
-      throw new PreconditionFailedException(Error);
-    }
-  }
-
-  async updatePrescription(prescriptionId: string, updatePrescriptionData: UpdatePrescriptionDto) {
-    try {
-
-      const isExistPrescription = await this.PrescriptionModel.findOne({ "_id": prescriptionId });
-
-      if (!isExistPrescription) {
-        throw new PreconditionFailedException({
-          "message": MESSAGES.INVALID_PRESCRIPTION_ID
-        })
-      }
-      updatePrescriptionData.updatedOn = new Date();
-
-      const isUpdate = await this.PrescriptionModel.findByIdAndUpdate({ _id: prescriptionId },
-        updatePrescriptionData, { upsert: false });
-      if (isUpdate) {
-        return {
-          "prescriptionId": isUpdate._id,
-          "messages": MESSAGES.UPDATED_SUCCESS_MSG
+      }else{
+        //call external api & search precriptions
+        const externalSearchResult = searchPrescrtiton(`${process.env.PRESCRIPTION_URL}/${nhi}`);
+        if(externalSearchResult){
+            return externalSearchResult;
         }
+        return [];
       }
-      throw new PreconditionFailedException({
-        "message": MESSAGES.UPDATED_FAILED_MSG
-      })
+
+    
+
+    } catch (Error) {
+      throw new PreconditionFailedException(Error);
+    }
+  }
+
+
+  async updatePrescription(nhi:string,prescriptionId: string, updatePrescriptionData: UpdatePrescriptionDto) {
+    try {
+          updatePrescriptionData.updatedOn = new Date();
+          const isUpdate = await this.PrescriptionModel.findByIdAndUpdate({ _id: prescriptionId },
+            updatePrescriptionData, { upsert: false });
+
+            //Update prescription
+            updatePrescripton(`${process.env.PRESCRIPTION_URL}/${nhi}`,updatePrescriptionData);
+          if (isUpdate) {
+            return {
+              "prescriptionId": isUpdate._id,
+              "messages": MESSAGES.UPDATED_SUCCESS_MSG
+            }
+          }
     } catch (Error) {
       throw new PreconditionFailedException(Error)
     }

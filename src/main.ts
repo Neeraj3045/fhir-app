@@ -16,8 +16,6 @@ import { stringify } from 'yaml'
 import { RedocModule, RedocOptions } from 'nestjs-redoc';
 import { MESSAGES } from './constants';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
 import { writeFileSync } from 'fs';
 
 async function bootstrap() {
@@ -29,19 +27,6 @@ async function bootstrap() {
     ]
   });
 
-  app.setViewEngine('hbs');
-  app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-      maxAge: 30 * 60 * 1000,
-      httpOnly: true,
-    }
-  }));
-
-  app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true,
     transform: true,
@@ -53,37 +38,6 @@ async function bootstrap() {
     exceptionFactory: (errors: ValidationError[]) => {
       const message = errors.map(function (error) {
         const arr = error.children;
-        if (error.children != undefined && arr.length !=0) {
-          const newError = error?.children.map(function (newError) {
-            let error_nkey = 0;
-            if (newError.contexts) {
-              if (newError.contexts.isNotEmpty) {
-                error_nkey = newError.contexts.isNotEmpty.key;
-              } else if (newError.contexts.isInt) {
-                error_nkey = newError.contexts.isInt.key;
-              } else if (newError.contexts.isEmail) {
-                error_nkey = newError.contexts.isEmail.key;
-              } else if (newError.contexts.IsString) {
-                error_nkey = newError.contexts.IsString.key;
-              } else if (newError.contexts.IsUserAlreadyExistConstraint) {
-                error_nkey = newError.contexts.IsUserAlreadyExistConstraint.key;
-              } else if (newError.contexts.isMobilePhone) {
-                error_nkey = newError.contexts.isMobilePhone.key;
-              } else if (newError.contexts.Match) {
-                error_nkey = newError.contexts.Match.key;
-              }
-            }
-            var jsonData = {};
-            jsonData['message'] = `${Object?.values(
-              newError?.constraints,
-            )}`;
-            if (error_nkey) {
-              jsonData['message'] = `${error_nkey}`;
-            }
-            return jsonData;
-          })
-          return newError;
-        } else {
           let error_key = 0;
           if (error.contexts) {
             if (error.contexts.isNotEmpty) {
@@ -103,37 +57,20 @@ async function bootstrap() {
             }
           }
           var jsonData = {};
-          //${error.property} has wrong value ${error.value},
-          jsonData['message'] = `${Object.values(
+          jsonData = `${Object.values(
             error.constraints,
           )}`;
-          if (error_key) {
-            jsonData['key'] = `${error_key}`;
-          }
           return jsonData;
-        }
       })
-      return new PreconditionFailedException(message[0] ? message[0] : message);
     },
   }));
 
   app.useGlobalFilters(new AllExceptionsFilter());
   app.getHttpAdapter().getInstance().disable('x-powered-by');
-  const d = new Date();
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-  const nth = function (d: number) {
-    if (d > 3 && d < 21) return 'th';
-    switch (d % 10) {
-      case 1: return "st";
-      case 2: return "nd";
-      case 3: return "rd";
-      default: return "th";
-    }
-  }
   
   const config = new DocumentBuilder()
     .setTitle(MESSAGES.API_TITLE)
-    .setDescription(` ${MESSAGES.API_DESCRIPTION} <i>Updated on ${d.getDate()}<sup>${nth(d.getDate())}</sup>  ${months[d.getMonth()]}  ${d.getFullYear()} <i/>`)
+    .setDescription(` ${MESSAGES.API_DESCRIPTION}`)
     .setVersion(process.env.SWAGGER_VERSION)
     .addServer(process.env.API_URL, '', {})
     .setContact(process.env.SWAGGER_CONTACT_NAME, process.env.SWAGGER_CONTACT_WEBSITE, process.env.SWAGGER_CONTACT_EMAIL)
@@ -158,6 +95,6 @@ async function bootstrap() {
     swaggerOptions: { defaultModelsExpandDepth: -1, defaultModelExpandDepth: 3 },
     customSiteTitle: MESSAGES.API_TITLE});
   
-  await app.listen(process.env.PORT || 1000);
+  await app.listen(process.env.PORT || 1001);
 }
 bootstrap();

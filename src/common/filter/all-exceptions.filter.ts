@@ -7,7 +7,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
-        let error = [{}];
+        let error = {};
 
         let status =
             exception instanceof HttpException
@@ -20,15 +20,13 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
             if(typeof error === 'object' && error !== null){
                 error = error;
             }else{
-                error = [{"message":error}];
+                error = {"message":error};
             }
         } else {
-            error = [{"message":exception?.message}];
+            error = {"message":exception?.message};
         }
 
         
-
-
         switch (status) {
 
             case HttpStatus.UNAUTHORIZED:
