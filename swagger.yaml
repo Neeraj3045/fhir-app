@@ -1,0 +1,294 @@
+openapi: 3.0.0
+paths:
+  /api/v1/prescriptions:
+    post:
+      operationId: add-prescription
+      summary: Add Prescriptions
+      description: Add Prescriptions
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateprescriptionsDto"
+      responses:
+        "201":
+          description: Prescription added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrescriptionSavedto"
+        "400":
+          &a1
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestSchema"
+        "403":
+          &a2
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenSchema"
+        "500":
+          &a3
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorSchema"
+      tags:
+        &a4
+        - Neblar Prescriptions API
+      security:
+        &a5
+        - bearer: []
+  "/api/v1/prescriptions/{nhi}":
+    get:
+      operationId: search-prescription
+      summary: Search NHI
+      description: Search NHI
+      parameters:
+        - name: nhi
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Filter prescriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateprescriptionsDto"
+        "400": *a1
+        "403": *a2
+        "500": *a3
+      tags: *a4
+      security: *a5
+  "/api/v1/prescriptions/{nhi}/{id}":
+    put:
+      operationId: update-prescription
+      summary: Update Prescriptions
+      description: Update Prescriptions
+      parameters:
+        - name: nhi
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePrescriptionDto"
+      responses:
+        "201":
+          description: Update Prescription successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrescriptionUpdateDto"
+        "400": *a1
+        "403": *a2
+        "500": *a3
+      tags: *a4
+      security: *a5
+info:
+  title: Neblar API Documentation
+  description: >-2
+     # Introduction
+    This API is documented in OpenAPI format. It was extended to illustrate features of generator-openapi-repo tool and ReDoc documentation.
+
+    '
+      and standard method from web, mobile and desktop applications.
+    <SecurityDefinitions />
+  version: "1.0"
+  contact:
+    name: FHIR
+    url: http://localhost:1001
+    email: neblar.support@gmail.com
+  termsOfService: http://localhost:1001
+  license:
+    name: Privacy Policy
+    url: http://localhost:1001
+tags: []
+servers:
+  - url: http://localhost:1001/fhir-app
+    description: ""
+    variables: {}
+components:
+  schemas:
+    BadRequestSchema:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Failure Status
+          example: Failure
+        statusCode:
+          type: string
+          description: Http Status Code
+          example: 400
+        data:
+          type: object
+          description: Blank Object
+          example: {}
+        errorDescription:
+          type: string
+          description: Error Description
+          example: This is bad request
+    ForbiddenSchema:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Failure Status
+          example: Failure
+        statusCode:
+          type: string
+          description: Http Status Code
+          example: 403
+        data:
+          type: object
+          description: Blank Object
+          example: {}
+        errorDescription:
+          type: string
+          description: Error Description
+          example: Forbidden
+    InternalServerErrorSchema:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Failure Status
+          example: Failure
+        statusCode:
+          type: string
+          description: Http Status Code
+          example: 500
+        data:
+          type: object
+          description: Blank Object
+          example: {}
+        errorDescription:
+          type: string
+          description: Error Description
+          example: Internal server error
+    PatientParam:
+      type: object
+      properties: {}
+    CreateprescriptionsDto:
+      type: object
+      properties:
+        patient:
+          example:
+            &a6
+            nhi: nhi-1234
+            name: Smith
+          allOf:
+            - $ref: "#/components/schemas/PatientParam"
+        date:
+          format: date-time
+          type: string
+          example: 2024-01-05T09:32:01.955Z
+        medications:
+          example:
+            &a7
+            - id: 63afe809158d860c20c94aae
+              dosage: 5ml
+          type: array
+          items:
+            type: object
+      required:
+        - patient
+        - date
+        - medications
+    PrescriptionSave:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 63afe809158d860c20c94aae
+        message:
+          type: string
+          example: Prescription created successfully
+      required:
+        - id
+        - message
+    PrescriptionSavedto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Success Status
+          example: Success
+        statusCode:
+          type: string
+          description: Http Status Code
+          example: 200
+        errorDescription:
+          type: string
+          description: Error Description
+          example: ""
+        error:
+          type: object
+          description: Blank Error Object
+          example:
+            &a8 {}
+        data:
+          $ref: "#/components/schemas/PrescriptionSave"
+    UpdatePrescriptionDto:
+      type: object
+      properties:
+        patient:
+          example: *a6
+          allOf:
+            - $ref: "#/components/schemas/PatientParam"
+        date:
+          format: date-time
+          type: string
+          example: 2024-01-05T09:32:01.955Z
+        medications:
+          example: *a7
+          type: array
+          items:
+            type: object
+    PrescriptionUpdateDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Success Status
+          example: Success
+        statusCode:
+          type: string
+          description: Http Status Code
+          example: 200
+        errorDescription:
+          type: string
+          description: Error Description
+          example: ""
+        error:
+          type: object
+          description: Blank Error Object
+          example: *a8
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/PrescriptionSave"
+externalDocs:
+  description: Find out more
+  url: http://localhost:1001
