@@ -1,15 +1,20 @@
-import { catchError, lastValueFrom, map } from "rxjs";
+import {from, lastValueFrom} from "rxjs";
 import { HttpService } from '@nestjs/axios';
-import { HttpException } from "@nestjs/common";
 
-export async function updatePrescripton(URL: string, params: Object) {
-  const httpService = new HttpService();
-  const updateResult =  httpService.put(URL, params)
-    .pipe(
-      map(response => response.data),
-    );
+export async function syncPrescriptionChangesToExternalDb(URL: string, params: Object) {
+  const axios = new HttpService();
+  const observable = from(await axios.put(URL, params));
+  lastValueFrom(observable)
+    .then(response => {
+      if (response) {
+        //update flag in db for prescription update sync
+      }
+    })
+    .catch(error => {
+      console.error(`External Db Sync: Prescription update is not sync to external db`);
+      //update flag in db for prescription update not sync
+    });
 
-   return await  lastValueFrom(updateResult);
 }
 
 

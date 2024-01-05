@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   PreconditionFailedException
@@ -9,9 +10,10 @@ import { UpdatePrescriptionDto } from './dto/request/update-prescriptions.dto';
 import { PrescriptionDocument, Prescription } from './schemas/prescriptions.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { MESSAGES } from 'src/constants';
-import { searchPrescrtiton } from 'src/common/function/external-api/search-prescription';
-import { postPrescription } from 'src/common/function/external-api/postPrescription';
-import { updatePrescripton } from 'src/common/function/external-api/updatePrescription';
+import { searchPrescriptionFromExternalDb } from 'src/common/function/external-api/search-prescription';
+import { syncPrescriptionToExternalDb } from 'src/common/function/external-api/postPrescription';
+import { syncPrescriptionChangesToExternalDb } from 'src/common/function/external-api/updatePrescription';
+import { BadRequestSchema } from './dto/response/http-status/bad-request.dto';
 @Injectable()
 export class PrescriptionsService {
   constructor(@InjectModel(Prescription.name)
@@ -22,8 +24,9 @@ export class PrescriptionsService {
     try {
       const saveData = await this.PrescriptionModel.create(createPrescription);
       if (saveData) {
+
         // call prescription push third party api
-        postPrescription(`${process.env.PRESCRIPTION_URL}`,createPrescription);
+        syncPrescriptionToExternalDb(`${process.env.PRESCRIPTION_URL}`,createPrescription);
 
         return { "prescriptionId": saveData._id, "message": MESSAGES.CREATED_SUCCESS_MSG };
       } else {
@@ -32,7 +35,7 @@ export class PrescriptionsService {
         });
       }
     } catch (Error) {
-      throw new PreconditionFailedException(Error);
+      throw new BadRequestException(Error);
     }
   }
 
@@ -56,7 +59,7 @@ export class PrescriptionsService {
         { $limit: limit }
       ]);
 
-      if (prescriptionsList?.length>0) {
+      if (prescriptionsList?.length > 0) {
         return {
           "paginated": {
             count: prescriptionsList?.length,
@@ -68,17 +71,14 @@ export class PrescriptionsService {
         };
       }else{
         //call external api & search precriptions
-        const externalSearchResult = searchPrescrtiton(`${process.env.PRESCRIPTION_URL}/${nhi}`);
+        const externalSearchResult =  searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`);
         if(externalSearchResult){
-            return externalSearchResult;
+          return externalSearchResult;
         }
-        return [];
+        throw new NotFoundException(`Prescription not found for ${nhi}`);
       }
-
-    
-
     } catch (Error) {
-      throw new PreconditionFailedException(Error);
+      throw new NotFoundException(Error);
     }
   }
 
@@ -90,15 +90,16 @@ export class PrescriptionsService {
             updatePrescriptionData, { upsert: false });
 
             //Update prescription
-            updatePrescripton(`${process.env.PRESCRIPTION_URL}/${nhi}`,updatePrescriptionData);
-          if (isUpdate) {
+            syncPrescriptionChangesToExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,updatePrescriptionData);
+          
+            if (isUpdate) {
             return {
               "prescriptionId": isUpdate._id,
               "messages": MESSAGES.UPDATED_SUCCESS_MSG
             }
           }
     } catch (Error) {
-      throw new PreconditionFailedException(Error)
+      throw new BadRequestException(Error)
     }
   }
 }

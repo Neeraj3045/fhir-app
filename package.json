@@ -1,7 +1,7 @@
 {
   "name": "fhir-app",
   "version": "1.1.0",
-  "description": "API for managing prescription",
+  "description": "API for prescription repository",
   "author": "Neeraj Singh <neeraj@daffodilsw.com>",
   "license": "UNLICENSED",
   "scripts": {

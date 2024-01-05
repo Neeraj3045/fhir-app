@@ -65,7 +65,8 @@ export class PrescriptionsController {
     description: MESSAGES.ADD_PRESCRIPTION_RESPONSE_DESCRIPTION,
   })
   @UseInterceptors(TransformInterceptor)
-  create(@Body() CreateprescriptionsDto: CreateprescriptionsDto
+  create(
+    @Body() CreateprescriptionsDto: CreateprescriptionsDto
   ) {
     return this.PrescriptionsService.createPrescriptions(CreateprescriptionsDto);
   }

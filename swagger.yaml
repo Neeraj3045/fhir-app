@@ -117,15 +117,15 @@ info:
   version: "1.0"
   contact:
     name: FHIR
-    url: http://localhost:1001/api/
+    url: http://localhost:1001/api
     email: neblar.support@gmail.com
-  termsOfService: http://localhost:1001/api/
+  termsOfService: http://localhost:1001/api
   license:
     name: Privacy Policy
-    url: http://localhost:1001/api/
+    url: http://localhost:1001/api
 tags: []
 servers:
-  - url: http://localhost:1001/api/
+  - url: http://localhost:1001/api
     description: ""
     variables: {}
 components:
@@ -203,7 +203,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T10:49:16.734Z
+          example: 2024-01-05T16:14:48.994Z
         medications:
           example:
             &a7
@@ -260,7 +260,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T10:49:16.734Z
+          example: 2024-01-05T16:14:48.994Z
         medications:
           example: *a7
           type: array
@@ -291,4 +291,4 @@ components:
             $ref: "#/components/schemas/PrescriptionSave"
 externalDocs:
   description: Find out more
-  url: http://localhost:1001/api/
+  url: http://localhost:1001/api

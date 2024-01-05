@@ -18,7 +18,7 @@ export type PrescriptionDocument = Prescription & Document;
     @Prop({required:true})
     date:Date;
 
-    @Prop({required:true,type:Object})
+    @Prop({required:true,type:[Object]})
     medications:[{
         "id":string,
         "dosage":string
@@ -34,5 +34,6 @@ export type PrescriptionDocument = Prescription & Document;
     updatedOn: Date;
 }
 
-const PrescriptionSchema = SchemaFactory.createForClass(Prescription);
-export {PrescriptionSchema}
+const createSchema = SchemaFactory.createForClass(Prescription);
+const prescriptionSchema = createSchema.index({'patient.nhi': 1}, {unique: true});
+export {prescriptionSchema}

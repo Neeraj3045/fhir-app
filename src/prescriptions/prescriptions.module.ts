@@ -3,7 +3,7 @@ import { PrescriptionsService } from './prescriptions.service';
 import { PrescriptionsController } from './prescriptions.controller';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import {Prescription, PrescriptionSchema } from './schemas/prescriptions.schema';
+import {Prescription, prescriptionSchema } from './schemas/prescriptions.schema';
 
 
 @Module({
@@ -12,7 +12,7 @@ import {Prescription, PrescriptionSchema } from './schemas/prescriptions.schema'
   imports: [
     ConfigModule,
     MongooseModule.forFeature([
-      { name: Prescription.name, schema: PrescriptionSchema}
+      { name: Prescription.name, schema: prescriptionSchema}
     ]),
   ],
   exports:[PrescriptionsService]
