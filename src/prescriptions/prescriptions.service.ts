@@ -1,105 +1,92 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
-  PreconditionFailedException
+  NotFoundException
 } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateprescriptionsDto } from './dto/request/create-prescriptions.dto';
 import { UpdatePrescriptionDto } from './dto/request/update-prescriptions.dto';
-import { PrescriptionDocument, Prescription } from './schemas/prescriptions.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { MESSAGES } from 'src/constants';
-import { searchPrescriptionFromExternalDb } from 'src/common/function/external-api/search-prescription';
-import { syncPrescriptionToExternalDb } from 'src/common/function/external-api/postPrescription';
-import { syncPrescriptionChangesToExternalDb } from 'src/common/function/external-api/updatePrescription';
-import { BadRequestSchema } from './dto/response/http-status/bad-request.dto';
+import { searchPrescriptionFromExternalDb } from '../common/function/external-api/search-prescription';
+import { syncPrescriptionToExternalDb } from '../common/function/external-api/postPrescription';
+import { syncPrescriptionChangesToExternalDb } from '../common/function/external-api/updatePrescription';
+import { Prescription} from './schemas/prescriptions.schema';
+
 @Injectable()
 export class PrescriptionsService {
-  constructor(@InjectModel(Prescription.name)
-  private readonly PrescriptionModel: Model<PrescriptionDocument>
-  ) { }
+  constructor(
+    @InjectModel(Prescription.name,) private prescriptionModel: Model<Prescription>) { }
 
-  async createPrescriptions(createPrescription: CreateprescriptionsDto) {
+  async createPrescriptions(createPrescriptionDto: CreateprescriptionsDto): Promise<Prescription> {
     try {
-      const saveData = await this.PrescriptionModel.create(createPrescription);
-      if (saveData) {
-
-        // call prescription push third party api
-        syncPrescriptionToExternalDb(`${process.env.PRESCRIPTION_URL}`,createPrescription);
-
-        return { "prescriptionId": saveData._id, "message": MESSAGES.CREATED_SUCCESS_MSG };
-      } else {
-        throw new PreconditionFailedException({
-          "message": MESSAGES.COMMON_ERROR_MSG
-        });
-      }
-    } catch (Error) {
-      throw new BadRequestException(Error);
+      const prescrptionCreate = new this.prescriptionModel(createPrescriptionDto);
+      const created = prescrptionCreate.save();
+      // call prescription push third party api
+      syncPrescriptionToExternalDb(`${process.env.PRESCRIPTION_URL}`, createPrescriptionDto);
+      return created;
+    } catch (error) {
+      throw new BadRequestException(`Somthing went wrong please try agian `, error);
     }
   }
 
   async prescriptionsList(
     nhi: string,
-    page = 1,
-    limit = 20
-  ) {
+    page:number=1,
+    limit:number=20
+  ){
     try {
-      let matchCondition = {};
-      if(nhi){
-        matchCondition = {"patient.nhi":{"$regex": nhi}};
-      }
-    
-      let prescriptionsList = await this.PrescriptionModel.aggregate([
+      const skip = (page - 1) * limit;
+      const searchNhi = nhi
+        ? {
+          "patient.nhi": {
+            "$regex": nhi
+          }
+        } : {};
+      const searchList = await this.prescriptionModel.aggregate([
         {
-          "$match": matchCondition,
+          "$match": searchNhi,
         },
         { "$sort": { "CreatedOn": -1 } },
-        { $skip: (page - 1) * limit },
+        { $skip: skip },
         { $limit: limit }
       ]);
-
-      if (prescriptionsList?.length > 0) {
-        return {
-          "paginated": {
-            count: prescriptionsList?.length,
-            from: (page - 1) * limit,
-            page: page,
-            limit: limit
-          },
-          "results": prescriptionsList
-        };
-      }else{
+      
+      const totalCount = await this.prescriptionModel.find(searchNhi).count();
+      const pageNo = skip>0?skip:1;
+      if (searchList?.length > 0) {
+        return {page:pageNo,total:totalCount,'results':searchList};
+      } else {
         //call external api & search precriptions
-        const externalSearchResult =  searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`);
-        if(externalSearchResult){
-          return externalSearchResult;
+        const externalSearchResult =  await searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,page,limit);
+        if(externalSearchResult !=undefined){
+          return {'results':externalSearchResult};
         }
-        throw new NotFoundException(`Prescription not found for ${nhi}`);
       }
+      throw new NotFoundException(`Search prescription is not found`);
     } catch (Error) {
       throw new NotFoundException(Error);
     }
   }
 
+  async findById(id: string): Promise<Prescription> {
 
-  async updatePrescription(nhi:string,prescriptionId: string, updatePrescriptionData: UpdatePrescriptionDto) {
+    const result = await this.prescriptionModel.findById(id);
+    if (!result) {
+      throw new NotFoundException(`Not found ${id}`);
+    }
+    return result;
+  }
+
+  async updatePrescription(nhi: string, prescriptionId: string, updatePrescriptionData: UpdatePrescriptionDto): Promise<Prescription> {
     try {
-          updatePrescriptionData.updatedOn = new Date();
-          const isUpdate = await this.PrescriptionModel.findByIdAndUpdate({ _id: prescriptionId },
-            updatePrescriptionData, { upsert: false });
-
-            //Update prescription
-            syncPrescriptionChangesToExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,updatePrescriptionData);
-          
-            if (isUpdate) {
-            return {
-              "prescriptionId": isUpdate._id,
-              "messages": MESSAGES.UPDATED_SUCCESS_MSG
-            }
-          }
+      updatePrescriptionData.updatedOn = new Date();
+      const isUPdated = await this.prescriptionModel.findByIdAndUpdate({ _id: prescriptionId },
+        updatePrescriptionData, { new: true });
+      //Update prescription
+      await syncPrescriptionChangesToExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,updatePrescriptionData);
+      return isUPdated;
     } catch (Error) {
-      throw new BadRequestException(Error)
+      throw new BadRequestException(`Something went wrong please try again!`,Error)
     }
   }
 }

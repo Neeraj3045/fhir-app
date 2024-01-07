@@ -1,9 +1,7 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { STATUS } from 'src/enums/enums';
-
-export type PrescriptionDocument = Prescription & Document;
+import { Document, HydratedDocument } from 'mongoose';
+//import { STATUS } from './enums/enums';
 
 
 @Schema()
@@ -24,8 +22,8 @@ export type PrescriptionDocument = Prescription & Document;
         "dosage":string
     }];
     
-    @Prop({default:STATUS.ACTIVE})
-    status:STATUS;
+    @Prop({default:'ACTIVE'})
+    status:string;
 
     @Prop({ default: Date.now })
     createdOn: Date;
@@ -34,6 +32,9 @@ export type PrescriptionDocument = Prescription & Document;
     updatedOn: Date;
 }
 
-const createSchema = SchemaFactory.createForClass(Prescription);
+
+
+export type PrescriptionDocument = Prescription & Document;
+ const createSchema = SchemaFactory.createForClass(Prescription);
 const prescriptionSchema = createSchema.index({'patient.nhi': 1}, {unique: true});
-export {prescriptionSchema}
+export { prescriptionSchema }

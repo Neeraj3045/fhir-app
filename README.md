@@ -59,9 +59,9 @@ $ npm run test
 
 - `http://localhost:1001`: Base Url
 - `GET  api-docs/`: Swagger documentation
-- `GET  api/v1/prescriptions/:nhi`: Search prescription by NHI
-- `POST api/v1/prescriptions`: Add a new prescription
-- `PUT  api/v1/prescriptions/:nhi/:id`: Update an existing prescription
+- `GET  /api/v1/prescriptions/:nhi`: Search prescription by NHI
+- `POST /api/v1/prescriptions`: Add a new prescription
+- `PUT  /api/v1/prescriptions/:nhi/:id`: Update an existing prescription
 
 ## Support us
 

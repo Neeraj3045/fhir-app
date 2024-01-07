@@ -4,4 +4,4 @@
     INACTIVE='INACTIVE'
   }
 
-  export {STATUS};
+  export { STATUS };

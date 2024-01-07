@@ -71,6 +71,23 @@ paths:
         "500": *a3
       tags: *a4
       security: *a5
+  "/v1/prescriptions/{id}":
+    get:
+      operationId: PrescriptionsController_findPrescriptionDetails
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+        "400": *a1
+        "403": *a2
+        "500": *a3
+      tags: *a4
+      security: *a5
   "/v1/prescriptions/{nhi}/{id}":
     put:
       operationId: update-prescription
@@ -203,7 +220,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T16:14:48.994Z
+          example: 2024-01-07T19:35:47.111Z
         medications:
           example:
             &a7
@@ -260,7 +277,7 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T16:14:48.994Z
+          example: 2024-01-07T19:35:47.111Z
         medications:
           example: *a7
           type: array
