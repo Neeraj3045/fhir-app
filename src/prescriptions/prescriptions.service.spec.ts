@@ -74,8 +74,8 @@ describe('PrescriptionsService', () => {
                     date: '2024-01-05T00:00:00.000Z',
                     medications: [
                         {
-                            id: 'sdfsfsdfsdfsfsd',
-                            dosage: '123'
+                            id: '659824c6250f08b4',
+                            dosage: '6 ml'
                         }
                     ],
                     status: STATUS.ACTIVE,
