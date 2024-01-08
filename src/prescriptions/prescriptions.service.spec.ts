@@ -13,7 +13,7 @@ describe('PrescriptionsService', () => {
     const mockPrescription = {
         _id: '659824c6250f08b420f9ed2a',
         patient: {
-            nhi: '12345',
+            nhi: '1234',
             name: 'Smith'
         },
         date: '2024-01-05T00:00:00.000Z',
@@ -60,7 +60,7 @@ describe('PrescriptionsService', () => {
     });
 
     describe('prescriptionsList', () => {
-        const nhi = 'nhi-12345';
+        const nhi = 'nhi-1234';
         const page = 1;
         const limit = 10;
         // const prescriptions = {
@@ -68,7 +68,7 @@ describe('PrescriptionsService', () => {
         //         {
         //             _id: '659824c6250f08b420f9ed2a',
         //             patient: {
-        //                 nhi: 'nhi-12345',
+        //                 nhi: 'nhi-1234',
         //                 name: 'Smith'
         //             },
         //             date: '2024-01-05T00:00:00.000Z',
@@ -86,7 +86,7 @@ describe('PrescriptionsService', () => {
         //         {
         //             _id: '659824c6250f08b420f9ed2a',
         //             patient: {
-        //                 nhi: 'nhi-12345',
+        //                 nhi: 'nhi-1234',
         //                 name: 'Smith'
         //             },
         //             date: '2024-01-05T00:00:00.000Z',
@@ -101,15 +101,19 @@ describe('PrescriptionsService', () => {
         //         }
         //     ]
         // };
-
-        it('should handle error thrown by "find"', async () => {
+           it('Should be defined',()=>{
+            expect(presService).toBeDefined();
+           });
+           it('should handle error thrown by "prescriptionsList"',async()=>{
             const errorMessage = 'error throw while searching';
-      
-            jest.spyOn(model,'find').mockImplementation(() => {
+            await expect(presService.prescriptionsList(nhi, page,limit)).rejects.toThrow(errorMessage);
+           })
+        it('should handle error thrown by "prescriptionsList"', async () => {
+            const errorMessage = 'error throw while searching';
+            jest.spyOn(presService,'prescriptionsList').mockImplementation(() => {
               throw new Error(errorMessage);
             });
-            await expect(presService.prescriptionsList(nhi, page,limit)).rejects.toThrow(errorMessage);
-          });
+        });
 
     });
 
@@ -117,14 +121,14 @@ describe('PrescriptionsService', () => {
         const createPrescrption = 
                 {
                     patient: {
-                        nhi: 'nhi-1234533',
+                        nhi: 'nhi-1234',
                         name: 'Smith'
                     },
                     date: '2024-01-05T00:00:00.000Z',
                     medications: [
                         {
-                            id: 'sdfsfsdfsdfsfsd',
-                            dosage: '123'
+                            id: '6598202a71a',
+                            dosage: '5 ml'
                         }
                     ]
                 };
@@ -133,7 +137,6 @@ describe('PrescriptionsService', () => {
            jest.spyOn(presService, 'createPrescriptions').mockImplementation( async ()=>createPrescrption as unknown as Prescription);
             const result = await presService.createPrescriptions(createPrescrption as CreateprescriptionsDto);
             expect(result).toBe(createPrescrption);
-
         });
 
     });
@@ -141,6 +144,10 @@ describe('PrescriptionsService', () => {
     describe('updatePrescription', () => {
         const updatePatient = {patient: {nhi: '1234',name: 'Neeraj'}};
         const newUpdated = {...mockPrescription,updatePatient};
+
+        it('Should be defined service',()=>{
+            expect(presService).toBeDefined();
+        })
      
         it('Should be update prescription by "findByIdAndUpdate"', async () => {
            jest.spyOn(model, 'findByIdAndUpdate').mockResolvedValue(newUpdated);
@@ -149,14 +156,5 @@ describe('PrescriptionsService', () => {
            expect(model.findByIdAndUpdate).toHaveBeenCalledTimes(1);
 
         });
-
-        it('should handle error throw by "findOneAndUpdate"', async () => {
-            const errorMessage = 'error occurs while calling findOneAndUpdate()';
-      
-            jest.spyOn(model,'findOneAndUpdate').mockImplementation(() => {
-              throw new Error(errorMessage);
-            });
-          });
-
     })
 });

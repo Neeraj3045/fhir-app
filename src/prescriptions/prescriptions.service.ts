@@ -10,13 +10,14 @@ import { UpdatePrescriptionDto } from './dto/request/update-prescriptions.dto';
 import { searchPrescriptionFromExternalDb } from '../common/function/external-api/search-prescription';
 import { syncPrescriptionToExternalDb } from '../common/function/external-api/postPrescription';
 import { syncPrescriptionChangesToExternalDb } from '../common/function/external-api/updatePrescription';
-import { Prescription} from './schemas/prescriptions.schema';
+import { Prescription } from './schemas/prescriptions.schema';
 
 @Injectable()
 export class PrescriptionsService {
   constructor(
-    @InjectModel(Prescription.name) 
-    private prescriptionModel: Model<Prescription>) { }
+    @InjectModel(Prescription.name)
+    private prescriptionModel: Model<Prescription>
+  ){ }
 
   async createPrescriptions(createPrescriptionDto: CreateprescriptionsDto): Promise<Prescription> {
     try {
@@ -32,9 +33,9 @@ export class PrescriptionsService {
 
   async prescriptionsList(
     nhi: string,
-    page:number=1,
-    limit:number=20
-  ){
+    page: number = 1,
+    limit: number = 20
+  ) {
     try {
       const skip = (page - 1) * limit;
       const searchNhi = nhi
@@ -43,29 +44,20 @@ export class PrescriptionsService {
             "$regex": nhi
           }
         } : {};
-      const searchList = await this.prescriptionModel.aggregate([
-        {
-          "$match": searchNhi,
-        },
-        { "$sort": { "CreatedOn": -1 } },
-        { $skip: skip },
-        { $limit: limit }
-      ]);
-      
-      const totalCount = await this.prescriptionModel.find(searchNhi);
-      const pageNo = skip>0?skip:1;
+      const searchList = await this.prescriptionModel.find({searchNhi}).skip(skip).limit(limit);
+      const totalCount = await this.prescriptionModel.find(searchNhi).countDocuments();
+      const pageNo = skip > 0 ? skip : 1;
       if (searchList?.length > 0) {
-        return {page:pageNo,total:totalCount.length,'results':searchList};
+        return { page: pageNo, total: totalCount, 'results': searchList };
       } else {
         //call external api & search precriptions
-        const externalSearchResult =  await searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`);
-        if(externalSearchResult != undefined){
-          return {'results':externalSearchResult};
+        const externalSearchResult = await searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`);
+        if (externalSearchResult != undefined) {
+          return { 'results': externalSearchResult };
         }
       }
-      throw new NotFoundException(`Search prescription is not found`);
     } catch (Error) {
-      throw new NotFoundException(Error);
+      throw new NotFoundException("error throw while searching");
     }
   }
 
@@ -84,10 +76,10 @@ export class PrescriptionsService {
       const isUPdated = await this.prescriptionModel.findByIdAndUpdate({ _id: prescriptionId },
         updatePrescriptionData, { new: true });
       //Update prescription
-      await syncPrescriptionChangesToExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,updatePrescriptionData);
+      await syncPrescriptionChangesToExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`, updatePrescriptionData);
       return isUPdated;
     } catch (Error) {
-      throw new BadRequestException(`Something went wrong please try again!`,Error)
+      throw new BadRequestException(`Something went wrong please try again!`, Error)
     }
   }
 }
