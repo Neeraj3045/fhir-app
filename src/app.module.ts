@@ -10,6 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import winston from 'winston';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PrescriptionModule } from './prescriptions/prescriptions.module';
+import { HttpModule, HttpService } from '@nestjs/axios';
 
 
 const configModules = [
@@ -39,6 +40,7 @@ const configModules = [
 
 var mongoDB = `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DATABASE}`;
 configModules.push(MongooseModule.forRoot(mongoDB));
+configModules.push(HttpService);
 
 @Module({
   imports: configModules,

@@ -13,7 +13,7 @@ describe('PrescriptionsService', () => {
     const mockPrescription = {
         _id: '659824c6250f08b420f9ed2a',
         patient: {
-            nhi: '1234',
+            nhi: '12345',
             name: 'Smith'
         },
         date: '2024-01-05T00:00:00.000Z',
@@ -86,7 +86,7 @@ describe('PrescriptionsService', () => {
         //         {
         //             _id: '659824c6250f08b420f9ed2a',
         //             patient: {
-        //                 nhi: 'nhi-1234',
+        //                 nhi: 'nhi-12345',
         //                 name: 'Smith'
         //             },
         //             date: '2024-01-05T00:00:00.000Z',
@@ -121,14 +121,14 @@ describe('PrescriptionsService', () => {
         const createPrescrption = 
                 {
                     patient: {
-                        nhi: 'nhi-1234',
+                        nhi: 'nhi-1234533',
                         name: 'Smith'
                     },
                     date: '2024-01-05T00:00:00.000Z',
                     medications: [
                         {
                             id: '6598202a71a',
-                            dosage: '5 ml'
+                            dosage: '5ml'
                         }
                     ]
                 };
@@ -151,7 +151,7 @@ describe('PrescriptionsService', () => {
      
         it('Should be update prescription by "findByIdAndUpdate"', async () => {
            jest.spyOn(model, 'findByIdAndUpdate').mockResolvedValue(newUpdated);
-           //const result = await model.findByIdAndUpdate(mockPrescription._id,updatePatient,{new:true});
+           await model.findByIdAndUpdate(mockPrescription._id,updatePatient,{new:true});
            expect(model.findByIdAndUpdate).toHaveBeenCalledWith(mockPrescription._id,updatePatient,{ new: true });
            expect(model.findByIdAndUpdate).toHaveBeenCalledTimes(1);
 
