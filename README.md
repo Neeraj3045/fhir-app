@@ -53,8 +53,6 @@ The server will start on port 1001. You can change this by setting the `PORT` en
 # unit tests
 $ npm run test
 ```
-## Flow Diagram
-![alt text](/public/Fhir-Architecture.drawio.png)
 
 ## API Endpoints Information
 
@@ -86,6 +84,8 @@ Develop an API for prescription management involves several steps, from setting 
 11. Documentation : Use swagger documentation for API end point,model & details response 
 12. Deployement : Prepare for deployemnt configration & env file
 
+## Architecture Diagram
+![alt text](/public/Fhir-Architecture.drawio.png)
 
 ## Support us
 
