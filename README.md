@@ -87,9 +87,5 @@ Develop an API for prescription management involves several steps, from setting 
 ## Architecture Diagram
 ![alt text](/public/Fhir-Architecture.drawio.png)
 
-## Support us
-
-
-Contact to prescriptions NHI at support@gmail.com.
 
 
