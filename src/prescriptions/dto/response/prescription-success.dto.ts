@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SuccessSchema } from './http-status/success.dto';
 
 class PrescriptionSave {
     @ApiProperty({ required: true, example:"63afe809158d860c20c94aae"})
@@ -19,11 +18,11 @@ class PrescriptionUpdate {
 
 
 
-export class PrescriptionSavedto extends SuccessSchema {
+export class PrescriptionSavedto  {
     @ApiProperty({ required: false, type: () => PrescriptionSave })
     data: PrescriptionSave;
 }
-export class PrescriptionUpdateDto extends SuccessSchema {
+export class PrescriptionUpdateDto {
     @ApiProperty({ required: false, isArray: true, type: () => PrescriptionSave })
     data: PrescriptionUpdate;
 }

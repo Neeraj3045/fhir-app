@@ -23,29 +23,11 @@ import {
   ApiTags
 } from '@nestjs/swagger';
 import { MESSAGES } from 'src/constants';
-import { BadRequestSchema } from './dto/response/http-status/bad-request.dto';
-import { ForbiddenSchema } from './dto/response/http-status/forbidden.dto';
-import { InternalServerErrorSchema } from './dto/response/http-status/internal-server-error.dto';
 import { PrescriptionSavedto, PrescriptionUpdateDto } from './dto/response/prescription-success.dto';
 
 
 @ApiTags(MESSAGES.PRESCRIPTION_TAG)
 @ApiBearerAuth()
-@ApiBadRequestResponse({
-  type: BadRequestSchema,
-  description: MESSAGES.BAD_REQUEST_MSG,
-})
-@ApiResponse({
-  status: 403,
-  type: ForbiddenSchema,
-  description: MESSAGES.FORBIDDEN_MSG,
-})
-@ApiResponse({
-  status: 500,
-  type: InternalServerErrorSchema,
-  description: MESSAGES.INTERNAL_SERVER_ERROR_MSG,
-})
-
 @Controller()
 export class PrescriptionsController {
   constructor(private readonly PrescriptionsService: PrescriptionsService) { }

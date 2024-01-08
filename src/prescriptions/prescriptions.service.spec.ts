@@ -63,44 +63,44 @@ describe('PrescriptionsService', () => {
         const nhi = 'nhi-12345';
         const page = 1;
         const limit = 10;
-        const prescriptions = {
-            "result": [
-                {
-                    _id: '659824c6250f08b420f9ed2a',
-                    patient: {
-                        nhi: 'nhi-12345',
-                        name: 'Smith'
-                    },
-                    date: '2024-01-05T00:00:00.000Z',
-                    medications: [
-                        {
-                            id: '659824c6250f08b4',
-                            dosage: '6 ml'
-                        }
-                    ],
-                    status: STATUS.ACTIVE,
-                    updatedOn: null,
-                    createdOn: '2024-01-05T15:48:22.281Z',
-                    __v: 0
-                },
-                {
-                    _id: '659824c6250f08b420f9ed2a',
-                    patient: {
-                        nhi: 'nhi-12345',
-                        name: 'Smith'
-                    },
-                    date: '2024-01-05T00:00:00.000Z',
-                    medications: [
-                        {
-                            id: '659824c6250f08',
-                            dosage: '10 ml'
-                        }
-                    ],
-                    status: STATUS.ACTIVE,
-                    createdOn: '2024-01-05T15:48:22.281Z'
-                }
-            ]
-        };
+        // const prescriptions = {
+        //     "result": [
+        //         {
+        //             _id: '659824c6250f08b420f9ed2a',
+        //             patient: {
+        //                 nhi: 'nhi-12345',
+        //                 name: 'Smith'
+        //             },
+        //             date: '2024-01-05T00:00:00.000Z',
+        //             medications: [
+        //                 {
+        //                     id: '659824c6250f08b4',
+        //                     dosage: '6 ml'
+        //                 }
+        //             ],
+        //             status: STATUS.ACTIVE,
+        //             updatedOn: null,
+        //             createdOn: '2024-01-05T15:48:22.281Z',
+        //             __v: 0
+        //         },
+        //         {
+        //             _id: '659824c6250f08b420f9ed2a',
+        //             patient: {
+        //                 nhi: 'nhi-12345',
+        //                 name: 'Smith'
+        //             },
+        //             date: '2024-01-05T00:00:00.000Z',
+        //             medications: [
+        //                 {
+        //                     id: '659824c6250f08',
+        //                     dosage: '10 ml'
+        //                 }
+        //             ],
+        //             status: STATUS.ACTIVE,
+        //             createdOn: '2024-01-05T15:48:22.281Z'
+        //         }
+        //     ]
+        // };
 
         it('should handle error thrown by "find"', async () => {
             const errorMessage = 'error throw while searching';
@@ -139,14 +139,12 @@ describe('PrescriptionsService', () => {
     });
 
     describe('updatePrescription', () => {
-        const prescriptionId = "6598202a71a0e984f08ea52a";
-        const nhi = '1234';
         const updatePatient = {patient: {nhi: '1234',name: 'Neeraj'}};
         const newUpdated = {...mockPrescription,updatePatient};
      
         it('Should be update prescription by "findByIdAndUpdate"', async () => {
            jest.spyOn(model, 'findByIdAndUpdate').mockResolvedValue(newUpdated);
-           const result = await model.findByIdAndUpdate(mockPrescription._id,updatePatient,{new:true});
+           //const result = await model.findByIdAndUpdate(mockPrescription._id,updatePatient,{new:true});
            expect(model.findByIdAndUpdate).toHaveBeenCalledWith(mockPrescription._id,updatePatient,{ new: true });
            expect(model.findByIdAndUpdate).toHaveBeenCalledTimes(1);
 

@@ -34,9 +34,8 @@ async function bootstrap() {
     dismissDefaultMessages: false,
     disableErrorMessages: false,
     exceptionFactory: (errors: ValidationError[]) => {
-      const message = errors.map(function (error) {
-        const arr = error.children;
-          let error_key = 0;
+      errors.map(function (error) {
+          let error_key = '';
           if (error.contexts) {
             if (error.contexts.isNotEmpty) {
               error_key = error.contexts.isNotEmpty.key;

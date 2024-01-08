@@ -1,7 +1,7 @@
 import { from, lastValueFrom} from "rxjs";
 import { HttpService } from '@nestjs/axios';
 
-export async function syncPrescriptionToExternalDb(URL: string, params: Object) {
+export async function syncPrescriptionToExternalDb(URL: string, params: object) {
   const axios = new HttpService();
   const observable = from(axios.post(URL, params));
   lastValueFrom(observable)
@@ -11,7 +11,7 @@ export async function syncPrescriptionToExternalDb(URL: string, params: Object) 
       }
     })
     .catch(error => {
-      console.error(`External Db Sync: Prescription is not sync to external db`);
+      console.error(`External Db Sync: Prescription is not sync to external db`,error);
       //update flag in db for prescription not sync
     });
 

@@ -15,7 +15,8 @@ import { Prescription} from './schemas/prescriptions.schema';
 @Injectable()
 export class PrescriptionsService {
   constructor(
-    @InjectModel(Prescription.name,) private prescriptionModel: Model<Prescription>) { }
+    @InjectModel(Prescription.name) 
+    private prescriptionModel: Model<Prescription>) { }
 
   async createPrescriptions(createPrescriptionDto: CreateprescriptionsDto): Promise<Prescription> {
     try {
@@ -57,8 +58,8 @@ export class PrescriptionsService {
         return {page:pageNo,total:totalCount.length,'results':searchList};
       } else {
         //call external api & search precriptions
-        const externalSearchResult =  await searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,page,limit);
-        if(externalSearchResult !=undefined){
+        const externalSearchResult =  await searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`);
+        if(externalSearchResult != undefined){
           return {'results':externalSearchResult};
         }
       }
