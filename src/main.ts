@@ -35,25 +35,7 @@ async function bootstrap() {
     disableErrorMessages: false,
     exceptionFactory: (errors: ValidationError[]) => {
       errors.map(function (error) {
-          let error_key = '';
-          if (error.contexts) {
-            if (error.contexts.isNotEmpty) {
-              error_key = error.contexts.isNotEmpty.key;
-            } else if (error.contexts.isInt) {
-              error_key = error.contexts.isInt.key;
-            } else if (error.contexts.isEmail) {
-              error_key = error.contexts.isEmail.key;
-            } else if (error.contexts.IsString) {
-              error_key = error.contexts.IsString.key;
-            } else if (error.contexts.IsUserAlreadyExistConstraint) {
-              error_key = error.contexts.IsUserAlreadyExistConstraint.key;
-            } else if (error.contexts.isMobilePhone) {
-              error_key = error.contexts.isMobilePhone.key;
-            } else if (error.contexts.Match) {
-              error_key = error.contexts.Match.key;
-            }
-          }
-          var jsonData = {};
+          let jsonData = {};
           jsonData = `${Object.values(
             error.constraints,
           )}`;
@@ -85,6 +67,6 @@ async function bootstrap() {
     swaggerOptions: { defaultModelsExpandDepth: -1, defaultModelExpandDepth: 3 },
     customSiteTitle: MESSAGES.API_TITLE});
   
-  await app.listen(process.env.PORT || 1001);
+  await app.listen(process.env.PORT);
 }
 bootstrap();

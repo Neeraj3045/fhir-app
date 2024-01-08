@@ -16,7 +16,6 @@ import { UpdatePrescriptionDto } from './dto/request/update-prescriptions.dto';
 import { TransformInterceptor } from 'src/common/interceptor/transform.interceptor';
 import { PaginationWithFilters } from 'src/utils/paginationWithFilter';
 import { 
-  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
