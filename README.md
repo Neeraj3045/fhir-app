@@ -80,7 +80,7 @@ Develop an API for prescription management involves several steps, from setting 
 7. Handle third party API call accordingly at every steps Create,update & search NHI
    -  `Use Axios to call the third-party API`
    -  `Return the data from the third-party API to the controller`
-8. Write cron schedule for sync data from internal & external API
+8. Write cron schedule for sync data from internal db & external API
 9. Error handling - Error handling Global & local exception filter,HTTP appropriate status code
 10. Testing - Write unit test for service method using Jest
 11. Documentation : Use swagger documentation for API end point,model & details response 
