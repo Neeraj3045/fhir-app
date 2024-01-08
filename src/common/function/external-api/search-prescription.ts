@@ -1,4 +1,4 @@
-import {from, lastValueFrom, map } from "rxjs";
+import {from, lastValueFrom} from "rxjs";
 import { HttpService } from '@nestjs/axios';
 
 

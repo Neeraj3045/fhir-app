@@ -1,4 +1,3 @@
-// src/common/filters/auth-exceptions.filter.ts
 import {
   ExceptionFilter,
   Catch,
@@ -8,7 +7,6 @@ import {
   ForbiddenException,
   PreconditionFailedException,
 } from '@nestjs/common';
-import { IS_ARRAY } from 'class-validator';
 import { Request, Response } from 'express';
 
 interface IRequestFlash extends Request {

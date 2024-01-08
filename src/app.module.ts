@@ -19,19 +19,19 @@ const configModules = [
   }),
 
   WinstonModule.forRootAsync({
-    // useFactory: (configService: ConfigService) => ({
-    //   transports: [
-    //     new winston.transports.File({
-    //       filename: `log/request-response.log`,
-    //     }),
-    //     new winston.transports.Console({
-    //       format: winston.format.combine(
-    //         winston.format.timestamp(),
-    //         nestWinstonModuleUtilities.format.nestLike(),
-    //       ),
-    //     }),
-    //   ],
-    // }),
+    useFactory: () => ({
+      transports: [
+        new winston.transports.File({
+          filename: `log/request-response.log`,
+        }),
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            nestWinstonModuleUtilities.format.nestLike(),
+          ),
+        }),
+      ],
+    }),
     inject: [ConfigService],
   }),
   PrescriptionModule,
