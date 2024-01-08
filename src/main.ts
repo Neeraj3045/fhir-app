@@ -1,5 +1,4 @@
 import {
-  PreconditionFailedException,
   RequestMethod,
   ValidationPipe
 } from '@nestjs/common';
@@ -13,7 +12,6 @@ import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filter/all-exceptions.filter';
 import { stringify } from 'yaml'
-import { RedocModule, RedocOptions } from 'nestjs-redoc';
 import { MESSAGES } from './constants';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { writeFileSync } from 'fs';
@@ -84,14 +82,7 @@ async function bootstrap() {
   };
   const document = SwaggerModule.createDocument(app, config, options);
   writeFileSync("./swagger.yaml", stringify(document));
-  const redocOptions: RedocOptions = {
-    title: MESSAGES.API_TITLE,
-    sortPropsAlphabetically: true,
-    hideDownloadButton: false,
-    hideHostname: false,
-  };
-  await RedocModule.setup(process.env.REDOC_URL, app, document, redocOptions);
-  SwaggerModule.setup(process.env.SWAGGER_URL, app, document, {
+ SwaggerModule.setup(process.env.SWAGGER_URL, app, document, {
     swaggerOptions: { defaultModelsExpandDepth: -1, defaultModelExpandDepth: 3 },
     customSiteTitle: MESSAGES.API_TITLE});
   

@@ -19,34 +19,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PrescriptionSavedto"
-        "400":
-          &a1
+        "400": &a1
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/BadRequestSchema"
-        "403":
-          &a2
+        "403": &a2
           description: Forbidden
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ForbiddenSchema"
-        "500":
-          &a3
+        "500": &a3
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorSchema"
-      tags:
-        &a4
+      tags: &a4
         - Neblar Prescriptions API
-      security:
-        &a5
+      security: &a5
         - bearer: []
-  "/v1/prescriptions/{nhi}":
+  /v1/prescriptions/{nhi}:
     get:
       operationId: search-prescription
       summary: Search NHI
@@ -71,7 +66,7 @@ paths:
         "500": *a3
       tags: *a4
       security: *a5
-  "/v1/prescriptions/{nhi}/{id}":
+  /v1/prescriptions/{nhi}/{id}:
     put:
       operationId: update-prescription
       summary: Update Prescriptions
@@ -107,7 +102,7 @@ paths:
       security: *a5
 info:
   title: Neblar API Documentation
-  description: >-2
+  description: >2-
      # Introduction
     This API is documented in OpenAPI format. It was extended to illustrate features of generator-openapi-repo tool and ReDoc documentation.
 
@@ -117,12 +112,8 @@ info:
   version: "1.0"
   contact:
     name: FHIR
-    url: null
     email: neblar.support@gmail.com
-  termsOfService: null
-  license:
-    ? name
-    ? url
+  license: {}
 tags: []
 servers:
   - url: http://localhost:1001/api
@@ -194,8 +185,7 @@ components:
       type: object
       properties:
         patient:
-          example:
-            &a6
+          example: &a6
             nhi: nhi-1234
             name: Smith
           allOf:
@@ -203,10 +193,9 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-08T11:59:32.489Z
+          example: &a7 2024-01-08T16:16:03.580Z
         medications:
-          example:
-            &a7
+          example: &a8
             - id: 63afe809158d860c20c94aae
               dosage: 5ml
           type: array
@@ -246,8 +235,7 @@ components:
         error:
           type: object
           description: Blank Error Object
-          example:
-            &a8 {}
+          example: &a9 {}
         data:
           $ref: "#/components/schemas/PrescriptionSave"
     UpdatePrescriptionDto:
@@ -260,9 +248,9 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-08T11:59:32.489Z
-        medications:
           example: *a7
+        medications:
+          example: *a8
           type: array
           items:
             type: object
@@ -284,11 +272,10 @@ components:
         error:
           type: object
           description: Blank Error Object
-          example: *a8
+          example: *a9
         data:
           type: array
           items:
             $ref: "#/components/schemas/PrescriptionSave"
 externalDocs:
-  description: null
   url: http://localhost:1001/api

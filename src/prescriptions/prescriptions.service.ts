@@ -51,10 +51,10 @@ export class PrescriptionsService {
         { $limit: limit }
       ]);
       
-      const totalCount = await this.prescriptionModel.find(searchNhi).count();
+      const totalCount = await this.prescriptionModel.find(searchNhi);
       const pageNo = skip>0?skip:1;
       if (searchList?.length > 0) {
-        return {page:pageNo,total:totalCount,'results':searchList};
+        return {page:pageNo,total:totalCount.length,'results':searchList};
       } else {
         //call external api & search precriptions
         const externalSearchResult =  await searchPrescriptionFromExternalDb(`${process.env.PRESCRIPTION_URL}/${nhi}`,page,limit);
