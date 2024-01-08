@@ -193,7 +193,7 @@ components:
         date:
           format: date-time
           type: string
-          example: &a7 2024-01-08T16:16:03.580Z
+          example: &a7 2024-01-08T16:19:17.427Z
         medications:
           example: &a8
             - id: 63afe809158d860c20c94aae
