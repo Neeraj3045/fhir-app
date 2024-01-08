@@ -93,14 +93,7 @@ export class PrescriptionsController {
     return this.PrescriptionsService.prescriptionsList(nhi, page, limit);
   }
 
-
-  @Get('/v1/prescriptions/:id')
-  findPrescriptionDetails(
-    @Param('id')  id : string
-  ) {
-    return this.PrescriptionsService.findById(id);
-  }
-
+  // Update precription
   @Put('/v1/prescriptions/:nhi/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

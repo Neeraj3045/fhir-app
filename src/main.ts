@@ -72,7 +72,7 @@ async function bootstrap() {
     .setTitle(MESSAGES.API_TITLE)
     .setDescription(` ${MESSAGES.API_DESCRIPTION}`)
     .setVersion(process.env.SWAGGER_VERSION)
-    .addServer(process.env.API_URL, '', {})
+    .addServer(process.env.SWAGGER_BASE_URL, '', {})
     .setContact(process.env.SWAGGER_CONTACT_NAME, process.env.SWAGGER_CONTACT_WEBSITE, process.env.SWAGGER_CONTACT_EMAIL)
     .setTermsOfService(process.env.SWAGGER_TERMS_OF_SERVICES)
     .setExternalDoc(process.env.SWAGGER_EXTERNAL_DOC, process.env.SWAGGER_EXTERNAL_DOC_URL)

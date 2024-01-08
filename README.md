@@ -5,8 +5,8 @@
 ## Prerequisites
 Please make sure that Node.js (version >= 16) is installed on your operating system.
 
-- [NodeJS](https://nodejs.org/en/) `>= 16`
-- [NestJs](https://nestjs.com/)
+- [NodeJS](https://nodejs.org/en/) `>= 16.x`
+- [NestJs](https://nestjs.com/) `>= 10.x`
 - [mongoose](https://www.npmjs.com/package/mongoose)`>= 9.0.3`
 
 
@@ -45,7 +45,7 @@ cp .env.example .env
 ```bash
 $ npm run start
 ```
-The server will start on port 1001. You can change this by setting the `PORT` environment variable in the `.env` file.
+The server will start on port 1001. You can change this by setting the `PORT` environment variable in the `.env` file, env file created at root directory and after npm install
 
 ## Test
 
