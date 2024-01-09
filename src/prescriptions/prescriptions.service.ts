@@ -7,13 +7,10 @@ import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { CreateprescriptionsDto } from "./dto/request/create-prescriptions.dto";
 import { UpdatePrescriptionDto } from "./dto/request/update-prescriptions.dto";
-//import { searchPrescriptionFromExternalDb } from "../common/function/external-api/search-prescription";
-//import { syncPrescriptionToExternalDb } from "../common/function/external-api/postPrescription";
-//import { syncPrescriptionChangesToExternalDb } from "../common/function/external-api/updatePrescription";
 import { Prescription } from "./schemas/prescriptions.schema";
-import { searchPrescriptionFromExternalDb } from "@/common/function/external-api/search-prescription";
-import { syncPrescriptionChangesToExternalDb } from "@/common/function/external-api/updatePrescription";
-import { syncPrescriptionToExternalDb } from "@/common/function/external-api/postPrescription";
+import { searchPrescriptionFromExternalDb } from "../common/function/external-api/search-prescription";
+import { syncPrescriptionChangesToExternalDb } from "../common/function/external-api/updatePrescription";
+import { syncPrescriptionToExternalDb } from "../common/function/external-api/postPrescription";
 
 @Injectable()
 export class PrescriptionsService {

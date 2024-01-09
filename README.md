@@ -56,10 +56,9 @@ $ npm run start
 ```
 The server will start on port 1001. You can change this by setting the `PORT` environment variable in the `.env` file, env file created at root directory and after npm install
 
-## Test
-
-```bash
 # unit tests
+
+```
 $ npm run test
 ```
 

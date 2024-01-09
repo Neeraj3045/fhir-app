@@ -7,6 +7,6 @@ export async function searchPrescriptionFromExternalDb(URL: string) {
         return response;
         // sync status update
       })
-      .catch(() => console.log("External search: Prescription is not found"));
+      .catch(() => console.log("External search: prescription is not found"));
   }
 }
