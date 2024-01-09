@@ -25,7 +25,7 @@ Clone the repository:
 
 ```
 git clone https://github.com/Neeraj3045/fhir-app
-cd repository
+cd fhir-app
 ```
 
 ## Installation all required package used in package.json
@@ -37,7 +37,16 @@ $ npm install
 Copy the `.env.example` file to `.env` and fill in the details in .env:
 
 ```
-cp .env.example .env
+cp env.example .env
+```
+
+## For database setup following steps 
+
+ 1. Create database name in mongodb
+ 2. Add database name in .env
+ 3. Update host name in .env
+ 4. Update mongodb port name in .env
+ 5. Add  user name & password if required
 ```
 
 ## Running the app
@@ -57,12 +66,12 @@ $ npm run test
 ## API Endpoints Information
 
 - `http://localhost:1001`: Base Url
-- `GET  api-docs/`: Swagger documentation
+- `GET  /api/docs`: Swagger documentation
 - `GET  /api/v1/prescriptions/:nhi`: Search prescription by NHI
-- `POST /api/v1/prescriptions`: Add a new prescription
-- `PUT  /api/v1/prescriptions/:nhi/:id`: Update an existing prescription
+- `POST /api/v1/prescription`: Add a new prescription
+- `PUT  /api/v1/prescription/:nhi/:prescriptionId`: Update an existing prescription
 
-## Development Approach
+## Development Process
 
 Develop an API for prescription management involves several steps, from setting up the project to handling Create,update & search operations and integrating third-party APIs using NestJS & Mongodb with.
 
@@ -72,9 +81,9 @@ Develop an API for prescription management involves several steps, from setting 
 4. Create prescripton Schema & DTO 
 5. Create prescription service method createPrescripton,updatepresciptions & searchPrescriptons
 6. Implement prescription API end point in prescripton controller
-   - `POST /api/v1/prescriptions` --- Create prescriptions
+   - `POST /api/v1/prescription` --- Create prescriptions
    - `GET  /api/v1/prescriptions/:nhi` ---- Search prescriptions
-   - `PUT /api/v1/prescriptions/:nhi/:prescriptionId` --- Update prescriptions 
+   - `PUT /api/v1/prescription/:nhi/:prescriptionId` --- Update prescriptions 
 7. Handle third party API call accordingly at every steps Create,update & search NHI
    -  `Use Axios to call the third-party API`
    -  `Return the data from the third-party API to the controller`
@@ -82,7 +91,7 @@ Develop an API for prescription management involves several steps, from setting 
 9. Error handling - Error handling Global & local exception filter,HTTP appropriate status code
 10. Testing - Write unit test for service method using Jest
 11. Documentation : Use swagger documentation for API end point,model & details response 
-12. Deployement : Prepare for deployemnt configration & env file
+12. GitHub repository : Create github repository and push fhir-app code
 
 ## Architecture Diagram
 ![alt text](/public/Fhir-Architecture.drawio.png)

@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
-import { PrescriptionsService } from './prescriptions.service';
-import { PrescriptionsController } from './prescriptions.controller';
-import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import {Prescription, prescriptionSchema } from './schemas/prescriptions.schema';
-
+import { Module } from "@nestjs/common";
+import { PrescriptionsService } from "./prescriptions.service";
+import { PrescriptionsController } from "./prescriptions.controller";
+import { ConfigModule } from "@nestjs/config";
+import { MongooseModule } from "@nestjs/mongoose";
+import {
+  Prescription,
+  prescriptionSchema,
+} from "./schemas/prescriptions.schema";
 
 @Module({
   controllers: [PrescriptionsController],
@@ -12,9 +14,9 @@ import {Prescription, prescriptionSchema } from './schemas/prescriptions.schema'
   imports: [
     ConfigModule,
     MongooseModule.forFeature([
-      { name: Prescription.name, schema: prescriptionSchema}
+      { name: Prescription.name, schema: prescriptionSchema },
     ]),
   ],
-  exports:[PrescriptionsService]
+  exports: [PrescriptionsService],
 })
 export class PrescriptionModule {}

@@ -1,10 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiExcludeEndpoint } from '@nestjs/swagger';
-import { AppService } from './app.service';
+import { Controller, Get } from "@nestjs/common";
+import { ApiExcludeEndpoint } from "@nestjs/swagger";
+import { AppService } from "./app.service";
 
-@Controller('fhir')
+@Controller("fhir")
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
   //it's used for health check
   @Get()

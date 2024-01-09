@@ -1,6 +1,6 @@
 openapi: 3.0.0
 paths:
-  /v1/prescriptions:
+  /v1/prescription:
     post:
       operationId: add-prescription
       summary: Add Prescriptions
@@ -21,8 +21,6 @@ paths:
                 $ref: "#/components/schemas/PrescriptionSavedto"
       tags: &a1
         - Neblar Prescriptions API
-      security: &a2
-        - bearer: []
   /v1/prescriptions/{nhi}:
     get:
       operationId: search-prescription
@@ -44,8 +42,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/CreateprescriptionsDto"
       tags: *a1
-      security: *a2
-  /v1/prescriptions/{nhi}/{id}:
+  /v1/prescription/{nhi}/{id}:
     put:
       operationId: update-prescription
       summary: Update Prescriptions
@@ -75,7 +72,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/PrescriptionUpdateDto"
       tags: *a1
-      security: *a2
 info:
   title: Neblar API Documentation
   description: >2-
@@ -104,7 +100,7 @@ components:
       type: object
       properties:
         patient:
-          example: &a3
+          example: &a2
             nhi: nhi-1234
             name: Smith
           allOf:
@@ -112,9 +108,9 @@ components:
         date:
           format: date-time
           type: string
-          example: &a4 2024-01-08T19:53:48.085Z
+          example: &a3 2024-01-09T10:13:47.485Z
         medications:
-          example: &a5
+          example: &a4
             - id: 63afe809158d860c20c94aae
               dosage: 5ml
           type: array
@@ -145,15 +141,15 @@ components:
       type: object
       properties:
         patient:
-          example: *a3
+          example: *a2
           allOf:
             - $ref: "#/components/schemas/PatientParam"
         date:
           format: date-time
           type: string
-          example: *a4
+          example: *a3
         medications:
-          example: *a5
+          example: *a4
           type: array
           items:
             type: object
