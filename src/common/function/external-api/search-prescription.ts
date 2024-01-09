@@ -1,15 +1,12 @@
-import { catchError, lastValueFrom, map } from "rxjs";
-import { HttpService } from '@nestjs/axios';
-import { HttpException } from "@nestjs/common";
-
- export async function searchPrescrtiton(URL: string) {
-  const httpService = new HttpService();
-  const searchData =  httpService.get(URL)
-  .pipe(
-    map(response => response?.data),
-  );
-  return await  lastValueFrom(searchData);
+import axios from "axios";
+export async function searchPrescriptionFromExternalDb(URL: string) {
+  {
+    axios
+      .get(URL)
+      .then((response) => {
+        return response;
+        // sync status update
+      })
+      .catch(() => console.log("External search: prescription is not found"));
+  }
 }
-
-
-

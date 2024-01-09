@@ -1,7 +1,6 @@
+enum STATUS {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}
 
-  enum STATUS {
-    ACTIVE='ACTIVE',
-    INACTIVE='INACTIVE'
-  }
-
-  export {STATUS};
+export { STATUS };

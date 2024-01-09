@@ -1,32 +1,34 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+## Prescriptions API repository 
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+ This is a REST API for prescriptions repository. It's built with NestJs and using Mongoose.
+
+## Prerequisites
+Please make sure that Node.js (version >= 16) is installed on your operating system.
+
+- [NodeJS](https://nodejs.org/en/) `>= 16.x`
+- [NestJs](https://nestjs.com/) `>= 10.x`
+- [mongoose](https://www.npmjs.com/package/mongoose)`>= 9.0.3`
+
+
+## Recommended IDE
+
+[Vscode](https://code.visualstudio.com/) is recommended as the debug configuration is provided assuming vscode.
+
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Github](https://github.com/Neeraj3045/fhir-app) Patient Prescriptions repository based on NHI
 
-## Installation
+## Getting Started
+
+Clone the repository:
+
+```
+git clone https://github.com/Neeraj3045/fhir-app
+cd fhir-app
+```
+
+## Installation all required package used in package.json
 
 ```bash
 $ npm install
@@ -35,49 +37,63 @@ $ npm install
 Copy the `.env.example` file to `.env` and fill in the details in .env:
 
 ```
-cp .env.example .env
+cp env.example .env
+```
+
+## For database setup following steps 
+
+ 1. Create database name in mongodb
+ 2. Add database name in .env
+ 3. Update host name in .env
+ 4. Update mongodb port name in .env
+ 5. Add  user name & password if required
 ```
 
 ## Running the app
 
 ```bash
-# development
 $ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
+The server will start on port 1001. You can change this by setting the `PORT` environment variable in the `.env` file, env file created at root directory and after npm install
 
-## Test
-
-```bash
 # unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-The server will start on port 1001. You can change this by setting the `PORT` environment variable in the `.env` file.
+$ npm run test
+```
 
 ## API Endpoints Information
 
-- `http://localhost:1001/`: Base Url
-- `GET  api-docs/`: Swagger documentation
-- `GET  api/v1/prescriptions/:nhi`: Search prescription by NHI
-- `POST api/v1/prescriptions`: Add a new prescription
-- `PUT  api/v1/prescriptions/:nhi/:prescriptionId`: Update an existing prescription
+- `http://localhost:1001`: Base Url
+- `GET  /api/docs`: Swagger documentation
+- `GET  /api/v1/prescriptions/:nhi`: Search prescription by NHI
+- `POST /api/v1/prescription`: Add a new prescription
+- `PUT  /api/v1/prescription/:nhi/:prescriptionId`: Update an existing prescription
 
-## Support
+## Development Process
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Develop an API for prescription management involves several steps, from setting up the project to handling Create,update & search operations and integrating third-party APIs using NestJS & Mongodb with.
 
-## License
+1. Setup the NestJs with all required dependency & create project 
+2. Configure data base module for mongodb
+3. Create prescription module,controller and service
+4. Create prescripton Schema & DTO 
+5. Create prescription service method createPrescripton,updatepresciptions & searchPrescriptons
+6. Implement prescription API end point in prescripton controller
+   - `POST /api/v1/prescription` --- Create prescriptions
+   - `GET  /api/v1/prescriptions/:nhi` ---- Search prescriptions
+   - `PUT /api/v1/prescription/:nhi/:prescriptionId` --- Update prescriptions 
+7. Handle third party API call accordingly at every steps Create,update & search NHI
+   -  `Use Axios to call the third-party API`
+   -  `Return the data from the third-party API to the controller`
+8. Write cron schedule for sync data from internal db & external API
+9. Error handling - Error handling Global & local exception filter,HTTP appropriate status code
+10. Testing - Write unit test for service method using Jest
+11. Documentation : Use swagger documentation for API end point,model & details response 
+12. GitHub repository : Create github repository and push fhir-app code
 
-  Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Architecture Diagram
+![alt text](/public/Fhir-Architecture.drawio.png)
+
+
 

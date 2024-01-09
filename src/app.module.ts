@@ -1,25 +1,23 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 import {
   utilities as nestWinstonModuleUtilities,
   WinstonModule,
-} from 'nest-winston';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import winston from 'winston';
-import { MongooseModule } from '@nestjs/mongoose';
-import { PrescriptionModule } from './prescriptions/prescriptions.module';
-
+} from "nest-winston";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import winston from "winston";
+import { MongooseModule } from "@nestjs/mongoose";
+import { PrescriptionModule } from "./prescriptions/prescriptions.module";
 
 const configModules = [
   ConfigModule.forRoot({
     isGlobal: true,
-    envFilePath: ['.env'],
+    envFilePath: [".env"],
   }),
 
   WinstonModule.forRootAsync({
-    useFactory: (configService: ConfigService) => ({
+    useFactory: () => ({
       transports: [
         new winston.transports.File({
           filename: `log/request-response.log`,
@@ -35,9 +33,10 @@ const configModules = [
     inject: [ConfigService],
   }),
   PrescriptionModule,
-]
+];
 
-var mongoDB = `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DATABASE}`;
+const mongoDB = `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DATABASE}`;
+
 configModules.push(MongooseModule.forRoot(mongoDB));
 
 @Module({
@@ -45,9 +44,8 @@ configModules.push(MongooseModule.forRoot(mongoDB));
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): void {
-      consumer.apply(LoggerMiddleware).forRoutes('*');
+  configure(consumer: MiddlewareConsumer) {
+    consumer;
   }
 }

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 paths:
-  /v1/prescriptions:
+  /v1/prescription:
     post:
       operationId: add-prescription
       summary: Add Prescriptions
@@ -19,34 +19,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PrescriptionSavedto"
-        "400":
-          &a1
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequestSchema"
-        "403":
-          &a2
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ForbiddenSchema"
-        "500":
-          &a3
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorSchema"
-      tags:
-        &a4
+      tags: &a1
         - Neblar Prescriptions API
-      security:
-        &a5
-        - bearer: []
-  "/v1/prescriptions/{nhi}":
+  /v1/prescriptions/{nhi}:
     get:
       operationId: search-prescription
       summary: Search NHI
@@ -66,12 +41,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CreateprescriptionsDto"
-        "400": *a1
-        "403": *a2
-        "500": *a3
-      tags: *a4
-      security: *a5
-  "/v1/prescriptions/{nhi}/{id}":
+      tags: *a1
+  /v1/prescription/{nhi}/{id}:
     put:
       operationId: update-prescription
       summary: Update Prescriptions
@@ -100,14 +71,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PrescriptionUpdateDto"
-        "400": *a1
-        "403": *a2
-        "500": *a3
-      tags: *a4
-      security: *a5
+      tags: *a1
 info:
   title: Neblar API Documentation
-  description: >-2
+  description: >2-
      # Introduction
     This API is documented in OpenAPI format. It was extended to illustrate features of generator-openapi-repo tool and ReDoc documentation.
 
@@ -117,76 +84,15 @@ info:
   version: "1.0"
   contact:
     name: FHIR
-    url: http://localhost:1001/api/
     email: neblar.support@gmail.com
-  termsOfService: http://localhost:1001/api/
-  license:
-    name: Privacy Policy
-    url: http://localhost:1001/api/
+  license: {}
 tags: []
 servers:
-  - url: http://localhost:1001/api/
+  - url: http://localhost:1001/api
     description: ""
     variables: {}
 components:
   schemas:
-    BadRequestSchema:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Failure Status
-          example: Failure
-        statusCode:
-          type: string
-          description: Http Status Code
-          example: 400
-        data:
-          type: object
-          description: Blank Object
-          example: {}
-        errorDescription:
-          type: string
-          description: Error Description
-          example: This is bad request
-    ForbiddenSchema:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Failure Status
-          example: Failure
-        statusCode:
-          type: string
-          description: Http Status Code
-          example: 403
-        data:
-          type: object
-          description: Blank Object
-          example: {}
-        errorDescription:
-          type: string
-          description: Error Description
-          example: Forbidden
-    InternalServerErrorSchema:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Failure Status
-          example: Failure
-        statusCode:
-          type: string
-          description: Http Status Code
-          example: 500
-        data:
-          type: object
-          description: Blank Object
-          example: {}
-        errorDescription:
-          type: string
-          description: Error Description
-          example: Internal server error
     PatientParam:
       type: object
       properties: {}
@@ -194,8 +100,7 @@ components:
       type: object
       properties:
         patient:
-          example:
-            &a6
+          example: &a2
             nhi: nhi-1234
             name: Smith
           allOf:
@@ -203,10 +108,9 @@ components:
         date:
           format: date-time
           type: string
-          example: 2024-01-05T10:49:16.734Z
+          example: &a3 2024-01-09T10:47:49.104Z
         medications:
-          example:
-            &a7
+          example: &a4
             - id: 63afe809158d860c20c94aae
               dosage: 5ml
           type: array
@@ -231,64 +135,30 @@ components:
     PrescriptionSavedto:
       type: object
       properties:
-        status:
-          type: string
-          description: Success Status
-          example: Success
-        statusCode:
-          type: string
-          description: Http Status Code
-          example: 200
-        errorDescription:
-          type: string
-          description: Error Description
-          example: ""
-        error:
-          type: object
-          description: Blank Error Object
-          example:
-            &a8 {}
         data:
           $ref: "#/components/schemas/PrescriptionSave"
     UpdatePrescriptionDto:
       type: object
       properties:
         patient:
-          example: *a6
+          example: *a2
           allOf:
             - $ref: "#/components/schemas/PatientParam"
         date:
           format: date-time
           type: string
-          example: 2024-01-05T10:49:16.734Z
+          example: *a3
         medications:
-          example: *a7
+          example: *a4
           type: array
           items:
             type: object
     PrescriptionUpdateDto:
       type: object
       properties:
-        status:
-          type: string
-          description: Success Status
-          example: Success
-        statusCode:
-          type: string
-          description: Http Status Code
-          example: 200
-        errorDescription:
-          type: string
-          description: Error Description
-          example: ""
-        error:
-          type: object
-          description: Blank Error Object
-          example: *a8
         data:
           type: array
           items:
             $ref: "#/components/schemas/PrescriptionSave"
 externalDocs:
-  description: Find out more
-  url: http://localhost:1001/api/
+  url: http://localhost:1001/api
